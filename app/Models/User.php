@@ -44,4 +44,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function createdAuctions(){
+        return $this->hasMany(Auction::class, 'creator_id');
+    }
+    public function auctions(){
+        return $this->belongsToMany(Auction::class, 'bids')->withPivot('amount');
+    }
+    public function bids(){
+        return $this->hasMany(Bid::class);
+    }
 }
