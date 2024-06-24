@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auction;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuctionController extends Controller
 {
@@ -12,7 +14,8 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        //
+        $auctions = Auction::where('status', 'RUNNING')->get();
+        return view('auctions.index', ['auctions' => $auctions]);
     }
 
     /**
@@ -20,7 +23,7 @@ class AuctionController extends Controller
      */
     public function create()
     {
-        //
+        return view('auctions.create');
     }
 
     /**
@@ -28,7 +31,20 @@ class AuctionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'end_time' => 'required|date',
+            'starting_price' => 'required|numeric',
+            'buyout_price' => 'nullable|numeric',
+            'item_name' => 'required|string|max:255',
+            'item_description' => 'nullable|string',
+        ]);
+
+        $auction = $request->all();
+        $auction['creator_id'] == Auth::id();
+
+        Auction::create($auction);
+
+        return redirect()->route('home')->with('success', 'Auction created successfully.');
     }
 
     /**
@@ -36,7 +52,7 @@ class AuctionController extends Controller
      */
     public function show(Auction $auction)
     {
-        //
+        return view('auctions.show', ['auction' => $auction]);
     }
 
     /**
@@ -44,7 +60,7 @@ class AuctionController extends Controller
      */
     public function edit(Auction $auction)
     {
-        //
+        return view('auctions.edit', ['auction' => $auction]);
     }
 
     /**
@@ -52,7 +68,17 @@ class AuctionController extends Controller
      */
     public function update(Request $request, Auction $auction)
     {
-        //
+        $request->validate([
+            'end_time' => 'required|date',
+            'starting_price' => 'required|numeric',
+            'buyout_price' => 'nullable|numeric',
+            'item_name' => 'required|string|max:255',
+            'item_description' => 'nullable|string',
+        ]);
+
+        $auction->update($request->all());
+
+        return redirect()->route('home')->with('success', 'Auction updated successfully.');
     }
 
     /**
@@ -60,6 +86,8 @@ class AuctionController extends Controller
      */
     public function destroy(Auction $auction)
     {
-        //
+        $auction->delete();
+
+        return redirect()->route('home')->with('success', 'Auction deleted successfully.');
     }
 }
