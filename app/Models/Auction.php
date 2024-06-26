@@ -16,6 +16,8 @@ class Auction extends Model
         'buyout_price',
         'item_name',
         'item_description',
+        'category',
+        'photo',
         'status',
     ];
 

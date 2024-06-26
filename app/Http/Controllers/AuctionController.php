@@ -14,7 +14,7 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::where('status', 'RUNNING')->get();
+        $auctions = Auction::where('status', 'ACTIVE')->get();
         return view('auctions.index', ['auctions' => $auctions]);
     }
 
@@ -23,7 +23,26 @@ class AuctionController extends Controller
      */
     public function create()
     {
-        return view('auctions.create');
+
+        $categories = [
+            'Art and Collectibles',
+            'Jewelry and Watches',
+            'Electronics',
+            'Home and Garden',
+            'Fashion',
+            'Toys and Hobbies',
+            'Sports and Outdoors',
+            'Books and Media',
+            'Automotive',
+            'Business and Industrial',
+            'Coins and Currency',
+            'Health and Beauty',
+            'Tickets and Experiences',
+            'Crafts and DIY',
+            'Miscellaneous',
+        ];
+
+        return view('auctions.create',compact('categories'));
     }
 
     /**
@@ -37,13 +56,21 @@ class AuctionController extends Controller
             'buyout_price' => 'nullable|numeric',
             'item_name' => 'required|string|max:255',
             'item_description' => 'nullable|string',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category' => 'required|in:Art and Collectibles,Jewelry and Watches,Electronics,Home and Garden,Fashion,Toys and Hobbies,Sports and Outdoors,Books and Media,Automotive,Business and Industrial,Coins and Currency,Health and Beauty,Tickets and Experiences,Crafts and DIY,Miscellaneous',
         ]);
 
         $auction = $request->all();
-        $auction['creator_id'] == Auth::id();
+        $auction['creator_id'] = Auth::id();
+
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $path = $file->store('public/photos');
+            $auction['photo'] = basename($path);
+        }
 
         Auction::create($auction);
-
+        
         return redirect()->route('home')->with('success', 'Auction created successfully.');
     }
 
@@ -74,6 +101,9 @@ class AuctionController extends Controller
             'buyout_price' => 'nullable|numeric',
             'item_name' => 'required|string|max:255',
             'item_description' => 'nullable|string',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category' => 'required|in:Art and Collectibles,Jewelry and Watches,Electronics,Home and Garden,Fashion,Toys and Hobbies,Sports and Outdoors,Books and Media,Automotive,Business and Industrial,Coins and Currency,Health and Beauty,Tickets and Experiences,Crafts and DIY,Miscellaneous',
+
         ]);
 
         $auction->update($request->all());
