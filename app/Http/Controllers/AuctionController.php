@@ -14,7 +14,9 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::where('status', 'ACTIVE')->get();
+        $auctions = Auction::where('status', 'ACTIVE')
+                   ->with('creator')
+                   ->get();
         return view('auctions.index', ['auctions' => $auctions]);
     }
 

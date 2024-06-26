@@ -17,7 +17,7 @@
             background-color: #f0f0f0; 
             cursor: pointer;
         }
-    </style>
+</style>
 
 <div class="container">
     <div class="row justify-content-center">

@@ -28,4 +28,8 @@ class Auction extends Model
         return $this->belongsToMany(User::class, 'bids')->withPivot('amount');
     }
 
+    public function creator(){
+        return $this->belongsTo(User::class, 'creator_id');
+    }
+
 }

@@ -35,7 +35,7 @@
                             <a class="nav-link" href="#">Browse auctions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Create an auction</a>
+                            <a class="nav-link" href="{{ route('auctions.create') }}">Create an auction</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">My auctions</a>
