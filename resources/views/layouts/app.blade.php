@@ -32,7 +32,7 @@
                 
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Browse auctions</a>
+                            <a class="nav-link" href="{{ route('home') }}">Browse auctions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('auctions.create') }}">Create an auction</a>
