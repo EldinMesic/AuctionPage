@@ -20,6 +20,7 @@
 
     .grid-item form {
         display: flex;
+        width: 100%;
         height: 100%;
     }
 
@@ -28,6 +29,7 @@
         border: none;
         outline: none;
         text-align: center;
+        padding: 0;
     }
 
     .grid-item button:focus {
@@ -68,10 +70,10 @@
                             @foreach($chunk as $category)
                                 <div class="col-md-4">
                                     <div class="grid-item">
-                                        <form method="POST" action="{{ route('home.auctions') }}">
+                                        <form class="d-flex justify-content-center" method="POST" action="{{ route('home.auctions') }}">
                                             @csrf
                                             <button type="submit" name="category" value="{{ $category }}">
-                                                <h3>{{ $category }}</h3>
+                                                {{ $category }}
                                             </button>
                                         </form>
                                     </div>

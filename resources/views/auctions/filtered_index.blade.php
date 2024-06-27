@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 d-flex justify-content-center">
         @foreach ($auctions as $auction)
             <div class="card mb-3 w-75">
                 <div class="card-body">
