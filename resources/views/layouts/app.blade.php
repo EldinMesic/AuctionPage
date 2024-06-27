@@ -38,7 +38,7 @@
                             <a class="nav-link" href="{{ route('auctions.create') }}">Create an auction</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">My auctions</a>
+                            <a class="nav-link" href="{{ route('myAuctions') }}">My auctions</a>
                         </li>
                         <li class="nav-item me-2">
                             <a class="nav-link" href="{{ route('logout') }}"

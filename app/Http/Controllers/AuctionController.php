@@ -40,6 +40,17 @@ class AuctionController extends Controller
         return view('home', ['auctions' => $auctions]);
     }
 
+    public function myAuctions(){
+
+        $userId = Auth::id();
+
+        $auctions = Auction::where('creator_id', $userId)
+                    ->with('creator')
+                    ->get();
+
+        return view("auctions.index", ['auctions' => $auctions]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
