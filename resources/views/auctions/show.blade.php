@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-center">
     <div class="card mb-3 w-50">
-            <div class="card-body">
+         <div class="card-body">
                             <h1 class="card-title fw-bold">{{ $auction->item_name }}</h1>
                                 <div class="d-flex flex-row">
 
@@ -37,11 +37,15 @@
                                         
                                         @if (Auth::id() != $auction->creator_id)
                                         <div class="d-flex flex-row">
+                                            <form method="POST" action="{{ route('auctions.store') }}">
+                                            @csrf
                                             <div class="input-group mb-3 w-50">
                                                 <span class="input-group-text bg-body-secondary">€</span>
+                                                <input type="hidden" name="auction_id" value="{{ $auction->id }}">
                                                 <input type="text" class="form-control w-25">
+                                                <button type="submit" class="btn btn-secondary ms-2 h-25">Bid</button>
                                             </div>
-                                            <button type="submit" class="btn btn-secondary ms-2 h-25">Bid</button>
+                                            </form>
                                         </div>
                                         @endif
                                         
@@ -61,8 +65,20 @@
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                             @endif
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
 
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
         </div>
     </div>
 </div>
+
+
 @endsection
