@@ -6,6 +6,7 @@ use App\Models\Auction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuctionController extends Controller
 {
@@ -18,6 +19,18 @@ class AuctionController extends Controller
                    ->with('creator')
                    ->get();
         return view('auctions.index', ['auctions' => $auctions]);
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function filtered_index(Request $request)
+    {
+        $auctions = Auction::where('status', 'ACTIVE')
+                    //->where('creator_id', '!=', Auth::id()) COMMENTED FOR TESTING
+                    ->where('category', $request->category)
+                    ->with('creator')
+                    ->get();
+        return view('home', ['auctions' => $auctions]);
     }
 
     /**

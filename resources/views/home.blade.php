@@ -2,21 +2,38 @@
 
 @section('content')
 <style>
-        .grid-item {
-            border: 1px solid #ccc;
-            text-align: center;
-            padding: 20px;
-            height: 100%;
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            transition: background-color 0.3s ease;
-        }
+    .grid-item {
+        border: 1px solid #ccc;
+        text-align: center;
+        padding: 20px;
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        transition: background-color 0.3s ease;
+        height: 100%;
+    }
 
-        .grid-item:hover {
-            background-color: #f0f0f0; 
-            cursor: pointer;
-        }
+    .grid-item:hover {
+        background-color: #f0f0f0; 
+        cursor: pointer;
+    }
+
+    .grid-item form {
+        display: flex;
+        height: 100%;
+    }
+
+    .grid-item button {
+        background: none;
+        border: none;
+        outline: none;
+        text-align: center;
+    }
+
+    .grid-item button:focus {
+        outline: none;
+    }
+
 </style>
 
 <div class="container">
@@ -26,93 +43,47 @@
                 <h1 class="mb-4">Browse by category!</h1>
 
                 <div class="container">
-                    <div class="row m-2">
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Art and Collectibles</h3>
-                            </div>
+                    @php
+                        $categories = [
+                            'Art and Collectibles',
+                            'Jewelry and Watches',
+                            'Electronics',
+                            'Home and Garden',
+                            'Fashion',
+                            'Toys and Hobbies',
+                            'Sports and Outdoors',
+                            'Books and Media',
+                            'Automotive',
+                            'Business and Industrial',
+                            'Coins and Currency',
+                            'Health and Beauty',
+                            'Tickets and Experiences',
+                            'Crafts and DIY',
+                            'Miscellaneous'
+                        ];
+                    @endphp
+
+                    @foreach(array_chunk($categories, 3) as $chunk)
+                        <div class="row m-2">
+                            @foreach($chunk as $category)
+                                <div class="col-md-4">
+                                    <div class="grid-item">
+                                        <form method="POST" action="{{ route('home.auctions') }}">
+                                            @csrf
+                                            <button type="submit" name="category" value="{{ $category }}">
+                                                <h3>{{ $category }}</h3>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Jewelry and Watches</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Electronics</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Home and Garden</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Fashion</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Toys and Hobbies</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Sports and Outdoors</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Books and Media</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Automotive</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Business and Industrial</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Coins and Currency</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Health and Beauty</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Tickets and Experiences</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Crafts and DIY</h3>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="grid-item">
-                                <h3>Miscellaneous</h3>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
+                @if (!empty($auctions) && $auctions->count())
+                    @include('auctions.filtered_index')    
+                @endif
 
                 <div>
                     @if (session('status'))
@@ -125,4 +96,5 @@
         </div>
     </div>
 </div>
+
 @endsection

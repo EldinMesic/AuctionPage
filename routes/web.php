@@ -12,6 +12,7 @@ Route::get('/', function () {
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::post('/home', [AuctionController::class, 'filtered_index'])->name('home.auctions');
     
     Route::resource('auctions', AuctionController::class);
     /* RESOURCE HANDLES ALL OF THESE ROUTES
