@@ -64,6 +64,14 @@
                                 @endif
                             </div>
                         </div>
+                        
+                        <div class="row mt-3 d-flex justify-content-center">
+                            <hr class="w-50">
+                        </div>
+                        
+                        <div class="d-flex justify-content-center">
+                            <p class="m-0">Don't have an account? <a href="{{ route('register') }}">Register</a></p>
+                        </div>
                     </form>
                 </div>
             </div>

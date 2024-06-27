@@ -68,6 +68,15 @@
                                 </button>
                             </div>
                         </div>
+
+                        <div class="row mt-3 d-flex justify-content-center">
+                            <hr class="w-50">
+                        </div>
+                        
+                        <div class="d-flex justify-content-center">
+                            <p class="m-0">Already have an account? <a href="{{ route('login') }}">Login</a></p>
+                        </div>
+
                     </form>
                 </div>
             </div>
