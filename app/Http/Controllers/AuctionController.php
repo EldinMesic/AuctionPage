@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auction;
+use App\Services\AuctionService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +11,12 @@ use Illuminate\Support\Facades\Log;
 
 class AuctionController extends Controller
 {
+    protected $auctionService;
+    public function __construct(AuctionService $auctionService)
+    {
+        $this->auctionService = $auctionService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -23,7 +30,7 @@ class AuctionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function filtered_index(Request $request)
+    public function filteredIndex(Request $request)
     {
         $auctions = Auction::where('status', 'ACTIVE')
                     //->where('creator_id', '!=', Auth::id()) COMMENTED FOR TESTING
@@ -94,7 +101,7 @@ class AuctionController extends Controller
      */
     public function show(Auction $auction)
     {
-        return view('auctions.show', ['auction' => $auction]);
+        return $this->auctionService->getAuctionView($auction->id);
     }
 
     /**
