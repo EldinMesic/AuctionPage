@@ -23,7 +23,7 @@ class BidController extends Controller
         ]);
 
         $amount = $request->amount;
-        $auction = $request->auction;
+        $auction = Auction::find($request->auction->id);
         
         $highestBid = $auction->bids()->orderByDesc('value')->first();
 
