@@ -32,4 +32,8 @@ class Auction extends Model
         return $this->belongsTo(User::class, 'creator_id');
     }
 
+    public function highestBid(){
+        return $this->bids()->orderByDesc('amount')->first();
+    }
+
 }

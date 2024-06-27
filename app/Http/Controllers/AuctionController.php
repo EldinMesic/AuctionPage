@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class AuctionController extends Controller
 {
-    protected $auctionService;
-    public function __construct(AuctionService $auctionService)
-    {
-        $this->auctionService = $auctionService;
-    }
 
     /**
      * Display a listing of the resource.
@@ -112,7 +107,15 @@ class AuctionController extends Controller
      */
     public function show(Auction $auction)
     {
-        return $this->auctionService->getAuctionView($auction->id);
+        $isCreator = $auction->creator() == Auth::user();
+        $highest_bid = $auction->highestBid();
+        $is_bit_leader = $highest_bid && $highest_bid->user() == Auth::user();
+
+        return view('auctions.show')
+            ->with('auction', $auction)
+            ->with('is_creator', $isCreator)
+            ->with('highest_bid', $highest_bid)
+            ->with('is_bid_leader', $is_bit_leader);
     }
 
     /**

@@ -10,12 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class BidController extends Controller
 {
-    protected $auctionService;
-    public function __construct(AuctionService $auctionService)
-    {
-        $this->auctionService = $auctionService;
-    }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -23,11 +17,14 @@ class BidController extends Controller
         ]);
 
         $amount = $request->amount;
-        $auction = Auction::find($request->auction->id);
+        $auction = Auction::find($request->auction_id);
         
         $highestBid = $auction->bids()->orderByDesc('value')->first();
 
-        if($highestBid > $amount){
+        if($amount < $auction->starting_price && $auction->bids()->count() === 0){
+            return redirect()->back()->with('error', 'Your bet is lower then the starting price.');
+        }
+        if($highestBid != null && $highestBid->amount > $amount){
             return redirect()->back()->with('error', 'Your bet is lower then the current highest bet.');
         }
         
@@ -37,9 +34,9 @@ class BidController extends Controller
                 'auction_id' => $auction->id,
                 'amount' => $amount
             ]);
+
             $auction->bids()->save($bid);
-            
-            return $this->auctionService->getAuctionView($auction->id)->with('success', 'Bid placed successfully');
+            return redirect()->route('auctions.show', ['auction' => $auction])->with('success', 'Bid placed successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to place bid. Please try again.');
         }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\BidController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +15,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::post('/home', [AuctionController::class, 'filteredIndex'])->name('home.auctions');
 
-    Route::post('/auctions', [BidController::class, 'store'])->name('auctions.store');
+    Route::post('/auctions/bid', [BidController::class, 'store'])->name('bid.store');
 
     Route::get('/myAuctions', [AuctionController::class, 'myAuctions'])->name('myAuctions');
     

@@ -15,6 +15,8 @@ class Bid extends Model
         'amount',
     ];
 
+    public $timestamps = false;
+
     public function user(){
         return $this->belongsTo(User::class);
     }

@@ -44,7 +44,11 @@
                                 </div>
 
                                 <div class="d-flex justify-content-center">
-                                        <p class="card-text fs-2">${{ number_format($auction->starting_price, 2) }}</p>              
+                                        @if ($auction->bids()->count() === 0)
+                                        <p class="card-text fs-2">${{ number_format($auction->starting_price, 2) }}</p>
+                                        @else
+                                        <p class="card-text fs-2">${{ number_format($auction->highestBid()->amount, 2) }}</p> 
+                                        @endif             
                                 </div>
                             </div>
                         <button>
