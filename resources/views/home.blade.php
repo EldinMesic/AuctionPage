@@ -44,7 +44,7 @@
           
                 <h1 class="mb-4">Browse by category!</h1>
 
-                <div class="container">
+                <div class="container mb-5">
                     @foreach(array_chunk($categories, 3) as $chunk)
                         <div class="row m-2">
                             @foreach($chunk as $category)

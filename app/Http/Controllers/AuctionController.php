@@ -45,9 +45,11 @@ class AuctionController extends Controller
                     ->where('category', $request->category)
                     ->with('creator')
                     ->get();
+       
         return view('home', [
             'auctions' => $auctions,
-            'categories' => $categories
+            'categories' => $categories,
+            'category' => $category
         ]);
     }
 

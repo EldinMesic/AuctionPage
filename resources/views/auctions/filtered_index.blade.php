@@ -20,9 +20,14 @@
     }
 
 </style>
-<div class="row">
+
+<div class="d-flex justify-content-center">
+    <h1>Category: {{ $category['name'] }}</h1>
+</div>
+
+@foreach ($auctions as $auction)
+<div class="row mt-2">
     <div class="col-md-12 d-flex justify-content-center">
-        @foreach ($auctions as $auction)
             <div class="card mb-3 w-75">
                         <button onclick="window.location='{{ route('auctions.show', ['auction' => $auction]) }}'">
                             <div class="card-body">
@@ -53,6 +58,7 @@
                             </div>
                         <button>
             </div>
-        @endforeach
+        
     </div>
 </div>
+@endforeach
