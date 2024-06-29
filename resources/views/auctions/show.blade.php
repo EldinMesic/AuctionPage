@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .photo-size{
+        width: 300px;
+        height: 300px;
+        object-fit: cover; 
+    }
+</style>
 <div class="d-flex justify-content-center">
     <div class="card mb-3 w-50">
          <div class="card-body">
@@ -40,18 +47,30 @@
                                         <p class="card-text fs-2">Current Bid: ${{ number_format($auction->highestBid()->amount, 2) }}</p>
                                         @endif
 
-                                        @if (!$is_creator)
+                                        @if (!$is_creator && $is_active)
                                         <div class="d-flex flex-row">
                                             <form method="POST" action="{{ route('bid.store') }}">
                                             @csrf
-                                            <div class="input-group mb-3 w-50">
-                                                <span class="input-group-text bg-body-secondary">€</span>
-                                                <input type="hidden" name="auction_id" value="{{ $auction->id }}">
-                                                <input type="number" name="amount" class="form-control w-25">
+                                            <div class="d-flex flex-row">
+                                                <div class="input-group mb-3 w-75">
+                                                    <span class="input-group-text bg-body-secondary">$</span>
+                                                    <input type="hidden" name="auction_id" value="{{ $auction->id }}">
+                                                    @if ($highest_bid!=null)
+                                                    <input type="number" name="amount" class="form-control w-25" placeholder="{{ $highest_bid['amount'] }}" min="{{ $highest_bid['amount'] }}">
+                                                    @endif
+
+                                                    @if($highest_bid==null)
+                                                    <input type="number" name="amount" class="form-control w-25" placeholder="{{ $auction->starting_price }}" min="{{ $auction->starting_price }}">
+                                                    @endif
+                                                </div>
                                                 <button type="submit" class="btn btn-secondary ms-2 h-25">Bid</button>
                                             </div>
                                             </form>
                                         </div>
+                                        @endif
+
+                                        @if (!$is_active)
+                                        <img src=" {{ asset('/Images/bought.png') }}" class="img-fluid">
                                         @endif
                                         
                                     </div>
@@ -71,9 +90,11 @@
                             </form>
                             @endif
                             @if (session('success'))
-                                <div class="alert alert-success">
+                            <div class="d-flex justify-content-center">
+                                <div class="alert alert-success d-flex justify-content-center w-25">
                                     {{ session('success') }}
                                 </div>
+                            </div>
                             @endif
 
                             @if (session('error'))

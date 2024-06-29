@@ -50,8 +50,8 @@
                                     @if (Auth::id() != $auction->creator_id)
                                     <div class="d-flex flex-row">
                                         <div class="input-group mb-3 w-50">
-                                            <span class="input-group-text bg-body-secondary">€</span>
-                                            <input type="text" class="form-control w-25">
+                                            <span class="input-group-text bg-body-secondary">$</span>
+                                            <input type="text" class="form-control">
                                         </div>
                                         <button type="submit" class="btn btn-secondary ms-2 h-25">Bid</button>
                                     </div>
