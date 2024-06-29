@@ -31,6 +31,9 @@ class BidController extends Controller
 
         $highestBid = $auction->bids()->orderByDesc('amount')->first();
 
+        if($highestBid->user->id === Auth::id()){
+            return redirect()->back()->with('error', 'You are already the bid leader.');
+        }
         if($amount < $auction->starting_price && $auction->bids()->count() === 0){
             return redirect()->back()->with('error', 'Your bet is lower then the starting price.');
         }

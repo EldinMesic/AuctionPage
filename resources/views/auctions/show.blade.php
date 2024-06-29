@@ -49,6 +49,13 @@
                                         <p class="card-text fs-2">Starting Price: ${{ number_format($auction->starting_price,2) }}</p>
                                         @else
                                         <p class="card-text fs-2">Current Bid: ${{ number_format($highest_bid['amount'],2) }}</p>
+                                        <p class="card-text fs-4"> 
+                                            @if (!$is_active && $auction->bids()->count() !== 0)
+                                            Bought By
+                                            @else
+                                            Bid Leader
+                                            @endif
+                                            : {{ $highest_bid->user->nickname }}</p>
                                         @endif
 
                                         @if (!$is_creator && $is_active)
