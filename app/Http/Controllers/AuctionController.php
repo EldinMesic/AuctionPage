@@ -30,6 +30,16 @@ class AuctionController extends Controller
      */
     public function filteredIndex(Request $request)
     {
+
+        $categories = [];
+        foreach (AuctionCategory::cases() as $category) {
+            $count = Auction::where('status', AuctionStatus::ACTIVE)->where('category', $category)->count();
+            $categories[] = [
+                'name' => $category->value,
+                'count' => $count
+            ];
+        }
+
         $auctions = Auction::where('status', AuctionStatus::ACTIVE)
                     //->where('creator_id', '!=', Auth::id()) COMMENTED FOR TESTING
                     ->where('category', $request->category)
@@ -37,7 +47,7 @@ class AuctionController extends Controller
                     ->get();
         return view('home', [
             'auctions' => $auctions,
-            'categories' => AuctionCategory::cases()
+            'categories' => $categories
         ]);
     }
 

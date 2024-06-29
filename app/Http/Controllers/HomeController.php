@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Enums\AuctionCategory;
 use Illuminate\Http\Request;
+use App\Models\Auction;
+use App\Enums\AuctionStatus;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home', ['categories' => AuctionCategory::cases()]);
+        $categories = [];
+        foreach (AuctionCategory::cases() as $category) {
+            $count = Auction::where('status', AuctionStatus::ACTIVE)->where('category', $category)->count();
+            $categories[] = [
+                'name' => $category->value,
+                'count' => $count
+            ];
+        }
+        return view('home', compact('categories'));
     }
 }

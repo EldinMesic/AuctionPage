@@ -52,8 +52,8 @@
                                     <div class="grid-item">
                                         <form class="d-flex justify-content-center" method="POST" action="{{ route('home.auctions') }}">
                                             @csrf
-                                            <button type="submit" name="category" value="{{ $category }}">
-                                                {{ $category }}
+                                            <button type="submit" name="category" value="{{ $category['name'] }}">
+                                               {{ $category['name']}} ({{ $category['count']}})
                                             </button>
                                         </form>
                                     </div>
