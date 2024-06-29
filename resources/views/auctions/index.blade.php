@@ -7,6 +7,7 @@
         height: 300px;
         object-fit: cover; 
     }
+
 </style>
 <div class="container">
     <h1 class="mb-4">All Auctions</h1>
@@ -42,17 +43,21 @@
                                     <img src="{{ asset('storage/photos/' . $auction->photo) }}" alt="{{ $auction->item_name }}" class="img-fluid photo-size">
                                     @endif
                                 </div>
-
+    
                                 <div class="ms-5">
                                     <p class="card-text fs-2">Starting Price: ${{ number_format($auction->starting_price, 2) }}</p>
                                     <p class="card-text fs-2">Buyout Price: ${{ number_format($auction->buyout_price, 2) }}</p>
                                    
-                                    @if ($auction->status->value == "FINISHED")
+                                    @if ($auction->status->value === "FINISHED" && $auction->bids->count() !== 0)
                                     <img src=" {{ asset('images/bought.png') }}" class="img-fluid">
                                     @endif
 
-                                    @if ($auction->status == "CANCELLED")
-                                    <img src=" {{ asset('images/cancelled.png') }}" class="img-fluid">
+                                    @if ($auction->status->value === "FINISHED" && $auction->bids->count() === 0)
+                                    <img src=" {{ asset('images/expired.png') }}" class="img-fluid scaled-image">
+                                    @endif
+
+                                    @if ($auction->status === "CANCELLED")
+                                    <img src=" {{ asset('images/cancelled.png') }}" class="img-fluid photo-size">
                                     @endif
 
                                     @if (Auth::id() != $auction->creator_id)
@@ -75,7 +80,7 @@
                                     <p class="card-text fw-bold">AUCTION DESCRIPTION</p>
                                     <p> {{ $auction->item_description }} </p>
                         </div>
-
+                        
                         @if (Auth::id() == $auction->creator_id && $auction->status->value == "ACTIVE")
                         <form action="{{ route('auctions.destroy', $auction->id) }}" method="POST" class="mt-2">
                             @csrf

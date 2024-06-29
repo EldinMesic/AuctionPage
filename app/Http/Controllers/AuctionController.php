@@ -59,6 +59,7 @@ class AuctionController extends Controller
 
         $auctions = Auction::where('creator_id', $userId)
                     ->with('creator')
+                    ->with('bids')
                     ->get();         
 
         return view("auctions.index", ['auctions' => $auctions]);
