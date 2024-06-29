@@ -18,7 +18,7 @@ class BidController extends Controller
             'amount' => 'required|numeric|min:0',
         ]);
 
-        $amount = $request->amount;
+        $amount = (float) $request->amount;
         $auction = Auction::find($request->auction_id);
         
         if($auction->status !== AuctionStatus::ACTIVE){
@@ -29,7 +29,7 @@ class BidController extends Controller
             return redirect()->back()->with('error', 'This bid is already over.');
         }
 
-        $highestBid = $auction->bids()->orderByDesc('value')->first();
+        $highestBid = $auction->bids()->orderByDesc('amount')->first();
 
         if($amount < $auction->starting_price && $auction->bids()->count() === 0){
             return redirect()->back()->with('error', 'Your bet is lower then the starting price.');

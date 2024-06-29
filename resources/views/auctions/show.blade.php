@@ -98,9 +98,11 @@
                             @endif
 
                             @if (session('error'))
-                                <div class="alert alert-danger">
+                            <div class="d-flex justify-content-center">
+                                <div class="alert alert-danger d-flex justify-content-center w-25">
                                     {{ session('error') }}
                                 </div>
+                            </div>
                             @endif
         </div>
     </div>
