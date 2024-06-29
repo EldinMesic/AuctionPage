@@ -7,6 +7,10 @@
         height: 300px;
         object-fit: cover; 
     }
+
+    .text-align{
+        text-align: center;
+    }
 </style>
 <div class="d-flex justify-content-center">
     <div class="card mb-3 w-50">
@@ -69,17 +73,22 @@
                                         </div>
                                         @endif
 
-                                        @if (!$is_active)
+                                        @if (!$is_active && $auction->bids()->count() !== 0)
                                         <img src=" {{ asset('images/bought.png') }}" class="img-fluid">
+                                        @endif
+
+                                        @if (!$is_active && $auction->bids()->count() === 0)
+                                        <img src=" {{ asset('images/expired.png') }}" class="img-fluid">
                                         @endif
                                         
                                     </div>
                             
                                 </div>
-                            
-                            <div class="d-flex flex-column mt-2">
-                                        <p class="card-text fw-bold">AUCTION DESCRIPTION</p>
-                                        <p> {{ $auction->item_description }} </p>
+                            <div class="d-flex justify-content-center">
+                                <div class="d-flex flex-column mt-2">
+                                            <p class="card-text fw-bold">AUCTION DESCRIPTION</p>
+                                            <p class="card-text text-align"> {{ $auction->item_description }} </p>
+                                </div>
                             </div>
 
                             @if ($is_creator)

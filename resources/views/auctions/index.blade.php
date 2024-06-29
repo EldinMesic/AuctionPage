@@ -8,6 +8,20 @@
         object-fit: cover; 
     }
 
+    .card button {
+        background: none;
+        border: none;
+        outline: none;
+        text-align: center;
+        padding: 0;
+    }
+
+    .card:hover {
+        background-color: #f0f0f0; 
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
 </style>
 <div class="container">
     <h1 class="mb-4">All Auctions</h1>
@@ -16,6 +30,7 @@
         <div class="col-md-12">
             @foreach ($auctions as $auction)
                 <div class="card mb-3 w-75">
+                  <button onclick="window.location='{{ route('auctions.show', ['auction' => $auction]) }}'">
                     <div class="card-body">
                         <h1 class="card-title fw-bold">{{ $auction->item_name }}</h1>
                             <div class="d-flex flex-row">
@@ -91,6 +106,7 @@
 
                     </div>
                 </div>
+            </button>
             @endforeach
         </div>
     </div>
