@@ -59,7 +59,7 @@ class AuctionController extends Controller
 
         $auctions = Auction::where('creator_id', $userId)
                     ->with('creator')
-                    ->get();
+                    ->get();         
 
         return view("auctions.index", ['auctions' => $auctions]);
     }
@@ -114,6 +114,8 @@ class AuctionController extends Controller
         $is_bid_leader = $highest_bid && $highest_bid->user() == Auth::user();
 
         $is_active = $auction->status === AuctionStatus::ACTIVE;
+        $is_cancelled = $auction->status === AuctionStatus::CANCELLED;
+
         if($is_active && Carbon::parse($auction->end_time) <= Carbon::now()){
             $is_active = false;
 
@@ -126,7 +128,8 @@ class AuctionController extends Controller
             ->with('is_creator', $is_creator)
             ->with('highest_bid', $highest_bid)
             ->with('is_bid_leader', $is_bid_leader)
-            ->with('is_active', $is_active);
+            ->with('is_active', $is_active)
+            ->with('is_cancelled', $is_cancelled);
     }
 
     /**

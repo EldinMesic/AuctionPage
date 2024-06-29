@@ -70,7 +70,7 @@
                                         @endif
 
                                         @if (!$is_active)
-                                        <img src=" {{ asset('/Images/bought.png') }}" class="img-fluid">
+                                        <img src=" {{ asset('images/bought.png') }}" class="img-fluid">
                                         @endif
                                         
                                     </div>
