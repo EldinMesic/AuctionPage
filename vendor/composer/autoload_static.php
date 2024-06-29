@@ -172,6 +172,7 @@ class ComposerStaticInit40bee0adc31c377553af019034280de5
         ),
         'A' => 
         array (
+            'App\\Enums\\' => 10,
             'App\\' => 4,
         ),
     );
@@ -510,6 +511,10 @@ class ComposerStaticInit40bee0adc31c377553af019034280de5
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
         ),
+        'App\\Enums\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/Enums',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -518,7 +523,19 @@ class ComposerStaticInit40bee0adc31c377553af019034280de5
     );
 
     public static $classMap = array (
+        'App\\Enums\\BidStatus' => __DIR__ . '/../..' . '/app/Enums/BidStatus.php',
+        'App\\Http\\Controllers\\AuctionController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuctionController.php',
+        'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
+        'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
+        'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
+        'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
+        'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
+        'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
+        'App\\Http\\Controllers\\BidController' => __DIR__ . '/../..' . '/app/Http/Controllers/BidController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Models\\Auction' => __DIR__ . '/../..' . '/app/Models/Auction.php',
+        'App\\Models\\Bid' => __DIR__ . '/../..' . '/app/Models/Bid.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',

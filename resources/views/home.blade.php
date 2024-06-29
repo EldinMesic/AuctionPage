@@ -45,26 +45,6 @@
                 <h1 class="mb-4">Browse by category!</h1>
 
                 <div class="container">
-                    @php
-                        $categories = [
-                            'Art and Collectibles',
-                            'Jewelry and Watches',
-                            'Electronics',
-                            'Home and Garden',
-                            'Fashion',
-                            'Toys and Hobbies',
-                            'Sports and Outdoors',
-                            'Books and Media',
-                            'Automotive',
-                            'Business and Industrial',
-                            'Coins and Currency',
-                            'Health and Beauty',
-                            'Tickets and Experiences',
-                            'Crafts and DIY',
-                            'Miscellaneous'
-                        ];
-                    @endphp
-
                     @foreach(array_chunk($categories, 3) as $chunk)
                         <div class="row m-2">
                             @foreach($chunk as $category)

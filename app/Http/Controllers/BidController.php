@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AuctionStatus;
 use App\Models\Auction;
 use App\Models\Bid;
 use App\Services\AuctionService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,12 +21,20 @@ class BidController extends Controller
         $amount = $request->amount;
         $auction = Auction::find($request->auction_id);
         
+        if($auction->status !== AuctionStatus::ACTIVE){
+            return redirect()->back()->with('error', 'This bid is already over or cancelled.');
+        }else if($auction->end_time <= Carbon::now()){
+            $auction->status = AuctionStatus::FINISHED;
+            $auction->save();
+            return redirect()->back()->with('error', 'This bid is already over.');
+        }
+
         $highestBid = $auction->bids()->orderByDesc('value')->first();
 
         if($amount < $auction->starting_price && $auction->bids()->count() === 0){
             return redirect()->back()->with('error', 'Your bet is lower then the starting price.');
         }
-        if($highestBid != null && $highestBid->amount > $amount){
+        if($highestBid != null && $highestBid->amount >= $amount){
             return redirect()->back()->with('error', 'Your bet is lower then the current highest bet.');
         }
         
@@ -36,7 +46,14 @@ class BidController extends Controller
             ]);
 
             $auction->bids()->save($bid);
-            return redirect()->route('auctions.show', ['auction' => $auction])->with('success', 'Bid placed successfully');
+
+            if($amount >= $auction->buyout_price){
+                $auction->status = AuctionStatus::FINISHED;
+                $auction->save();
+                return redirect()->route('auctions.show', ['auction' => $auction])->with('success', 'Item bought successfully');    
+            }else{
+                return redirect()->route('auctions.show', ['auction' => $auction])->with('success', 'Bid placed successfully');
+            }
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to place bid. Please try again.');
         }

@@ -31,12 +31,12 @@
                                         @endif
                                     </div>
 
-                                    <div class="ms-5">
+                                    <div class="ms-5">                                       
+                                        <p class="card-text fs-2">Buyout Price: ${{ number_format($auction->buyout_price, 2) }}</p>
+                                        
                                         @if ($auction->bids()->count() === 0)
                                         <p class="card-text fs-2">Starting Price: ${{ number_format($auction->starting_price, 2) }}</p>
-                                        @endif
-                                        <p class="card-text fs-2">Buyout Price: ${{ number_format($auction->buyout_price, 2) }}</p>
-                                        @if ($auction->bids()->count() !== 0)
+                                        @else
                                         <p class="card-text fs-2">Current Bid: ${{ number_format($auction->highestBid()->amount, 2) }}</p>
                                         @endif
 

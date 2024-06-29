@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\AuctionStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Auction extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'status' => AuctionStatus::class,
+    ];
 
     protected $fillable = [
         'creator_id',

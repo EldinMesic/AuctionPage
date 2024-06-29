@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AuctionCategory;
+use App\Enums\AuctionStatus;
 use App\Models\Auction;
-use App\Services\AuctionService;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class AuctionController extends Controller
 {
@@ -17,7 +20,7 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::where('status', 'ACTIVE')
+        $auctions = Auction::where('status', AuctionStatus::ACTIVE)
                    ->with('creator')
                    ->get();
         return view('auctions.index', ['auctions' => $auctions]);
@@ -27,12 +30,15 @@ class AuctionController extends Controller
      */
     public function filteredIndex(Request $request)
     {
-        $auctions = Auction::where('status', 'ACTIVE')
+        $auctions = Auction::where('status', AuctionStatus::ACTIVE)
                     //->where('creator_id', '!=', Auth::id()) COMMENTED FOR TESTING
                     ->where('category', $request->category)
                     ->with('creator')
                     ->get();
-        return view('home', ['auctions' => $auctions]);
+        return view('home', [
+            'auctions' => $auctions,
+            'categories' => AuctionCategory::cases()
+        ]);
     }
 
     public function myAuctions(){
@@ -51,26 +57,7 @@ class AuctionController extends Controller
      */
     public function create()
     {
-
-        $categories = [
-            'Art and Collectibles',
-            'Jewelry and Watches',
-            'Electronics',
-            'Home and Garden',
-            'Fashion',
-            'Toys and Hobbies',
-            'Sports and Outdoors',
-            'Books and Media',
-            'Automotive',
-            'Business and Industrial',
-            'Coins and Currency',
-            'Health and Beauty',
-            'Tickets and Experiences',
-            'Crafts and DIY',
-            'Miscellaneous',
-        ];
-
-        return view('auctions.create',compact('categories'));
+        return view('auctions.create', ['categories' => AuctionCategory::cases()]);
     }
 
     /**
@@ -85,8 +72,11 @@ class AuctionController extends Controller
             'item_name' => 'required|string|max:255',
             'item_description' => 'nullable|string',
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category' => 'required|in:Art and Collectibles,Jewelry and Watches,Electronics,Home and Garden,Fashion,Toys and Hobbies,Sports and Outdoors,Books and Media,Automotive,Business and Industrial,Coins and Currency,Health and Beauty,Tickets and Experiences,Crafts and DIY,Miscellaneous',
+            'category' => [Rule::enum(AuctionCategory::class)]
         ]);
+        if(Carbon::parse($request->end_time) <= Carbon::now()){
+            return redirect()->back()->with('error', 'End time cannot be in the past');
+        }
 
         $auction = $request->all();
         $auction['creator_id'] = Auth::id();
@@ -107,15 +97,24 @@ class AuctionController extends Controller
      */
     public function show(Auction $auction)
     {
-        $isCreator = $auction->creator() == Auth::user();
+        $is_creator = $auction->creator() == Auth::user();
         $highest_bid = $auction->highestBid();
-        $is_bit_leader = $highest_bid && $highest_bid->user() == Auth::user();
+        $is_bid_leader = $highest_bid && $highest_bid->user() == Auth::user();
+
+        $is_active = $auction->status === AuctionStatus::ACTIVE;
+        if($is_active && Carbon::parse($auction->end_time) <= Carbon::now()){
+            $is_active = false;
+
+            $auction->status = AuctionStatus::FINISHED;
+            $auction->save();
+        }
 
         return view('auctions.show')
             ->with('auction', $auction)
-            ->with('is_creator', $isCreator)
+            ->with('is_creator', $is_creator)
             ->with('highest_bid', $highest_bid)
-            ->with('is_bid_leader', $is_bit_leader);
+            ->with('is_bid_leader', $is_bid_leader)
+            ->with('is_active', $is_active);
     }
 
     /**
@@ -132,19 +131,13 @@ class AuctionController extends Controller
     public function update(Request $request, Auction $auction)
     {
         $request->validate([
-            'end_time' => 'required|date',
-            'starting_price' => 'required|numeric',
-            'buyout_price' => 'nullable|numeric',
-            'item_name' => 'required|string|max:255',
-            'item_description' => 'nullable|string',
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category' => 'required|in:Art and Collectibles,Jewelry and Watches,Electronics,Home and Garden,Fashion,Toys and Hobbies,Sports and Outdoors,Books and Media,Automotive,Business and Industrial,Coins and Currency,Health and Beauty,Tickets and Experiences,Crafts and DIY,Miscellaneous',
-
+            'status' => [Rule::enum(AuctionStatus::class)]
         ]);
 
-        $auction->update($request->all());
+        $auction->status = $request->status;
+        $auction->save();
 
-        return redirect()->route('home')->with('success', 'Auction updated successfully.');
+        return redirect()->route('auctions.show')->with('success', 'Auction updated successfully.');
     }
 
     /**
