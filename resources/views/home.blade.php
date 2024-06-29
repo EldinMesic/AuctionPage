@@ -49,10 +49,11 @@
                         <div class="row m-2">
                             @foreach($chunk as $category)
                                 <div class="col-md-4">
-                                    <div class="grid-item">
+                                    <div class="grid-item" onclick="submitForm(this)">
                                         <form class="d-flex justify-content-center" method="POST" action="{{ route('home.auctions') }}">
                                             @csrf
-                                            <button type="submit" name="category" value="{{ $category['name'] }}">
+                                            <input type="hidden" name="category" value="{{ $category['name'] }}">
+                                            <button type="submit">
                                                {{ $category['name']}} ({{ $category['count']}})
                                             </button>
                                         </form>
@@ -78,5 +79,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    function submitForm(element) {
+        var form = element.querySelector('form');
+        if (form) {
+            form.submit();
+        }
+    }
+</script>
 
 @endsection
