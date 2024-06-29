@@ -39,12 +39,12 @@
                                     </div>
 
                                     <div class="ms-5">                                       
-                                        <p class="card-text fs-2">Buyout Price: ${{ number_format($auction->buyout_price, 2) }}</p>
+                                        <p class="card-text fs-2">Buyout Price: ${{ number_format($auction->buyout_price,2) }}</p>
                                         
                                         @if ($auction->bids()->count() === 0)
-                                        <p class="card-text fs-2">Starting Price: ${{ number_format($auction->starting_price, 2) }}</p>
+                                        <p class="card-text fs-2">Starting Price: ${{ number_format($auction->starting_price,2) }}</p>
                                         @else
-                                        <p class="card-text fs-2">Current Bid: ${{ number_format($auction->highestBid()->amount, 2) }}</p>
+                                        <p class="card-text fs-2">Current Bid: ${{ number_format($highest_bid['amount'],2) }}</p>
                                         @endif
 
                                         @if (!$is_creator && $is_active)
@@ -60,7 +60,7 @@
                                                     @endif
 
                                                     @if($highest_bid==null)
-                                                    <input type="number" name="amount" class="form-control w-25" placeholder="{{ $auction->starting_price }}" min="{{ $auction->starting_price }}">
+                                                    <input type="number" name="amount" class="form-control w-25" placeholder="{{ $auction->starting_price }}" min="{{ $auction->starting_price }}" >
                                                     @endif
                                                 </div>
                                                 <button type="submit" class="btn btn-secondary ms-2 h-25">Bid</button>

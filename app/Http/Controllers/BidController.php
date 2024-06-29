@@ -37,6 +37,9 @@ class BidController extends Controller
         if($highestBid != null && $highestBid->amount >= $amount){
             return redirect()->back()->with('error', 'Your bet is lower then the current highest bet.');
         }
+        if($amount > $auction->buyout_price){
+            return redirect()->back()->with('error', 'Your bet is higher than the buyout price: '.number_format($auction->buyout_price, 2).'$');
+        }
         
         try {
             $bid = Bid::create([
