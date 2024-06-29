@@ -77,8 +77,12 @@
                                         <img src=" {{ asset('images/bought.png') }}" class="img-fluid">
                                         @endif
 
-                                        @if (!$is_active && $auction->bids()->count() === 0)
+                                        @if ($auction->status->value === "FINISHED" && $auction->bids()->count() === 0)
                                         <img src=" {{ asset('images/expired.png') }}" class="img-fluid">
+                                        @endif
+                                        
+                                        @if ($auction->status->value === "CANCELLED")
+                                        <img src=" {{ asset('images/cancelled.png') }}" class="img-fluid">
                                         @endif
                                         
                                     </div>
@@ -90,12 +94,13 @@
                                             <p class="card-text text-align"> {{ $auction->item_description }} </p>
                                 </div>
                             </div>
-
-                            @if ($is_creator)
-                            <form action="{{ route('auctions.destroy', $auction->id) }}" method="POST" class="mt-2">
+                           
+                            @if ($is_creator && $is_active)
+                            <form action="{{ route('auctions.update', $auction->id) }}" method="POST" class="mt-2">
                                 @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                @method('PUT')
+                                <input type="hidden" name="status" value="CANCELLED">
+                                <button type="submit" class="btn btn-danger">Cancel</button>
                             </form>
                             @endif
                             @if (session('success'))

@@ -68,11 +68,11 @@
                                     @endif
 
                                     @if ($auction->status->value === "FINISHED" && $auction->bids->count() === 0)
-                                    <img src=" {{ asset('images/expired.png') }}" class="img-fluid scaled-image">
+                                    <img src=" {{ asset('images/expired.png') }}" class="img-fluid">
                                     @endif
 
-                                    @if ($auction->status === "CANCELLED")
-                                    <img src=" {{ asset('images/cancelled.png') }}" class="img-fluid photo-size">
+                                    @if ($auction->status->value === "CANCELLED")
+                                    <img src=" {{ asset('images/cancelled.png') }}" class="img-fluid">
                                     @endif
 
                                     @if (Auth::id() != $auction->creator_id)
@@ -85,10 +85,7 @@
                                     </div>
                                     @endif
 
-                                    
-                                    
                                 </div>
-                           
                             </div>
                         
                         <div class="d-flex flex-column mt-2">
@@ -96,14 +93,6 @@
                                     <p> {{ $auction->item_description }} </p>
                         </div>
                         
-                        @if (Auth::id() == $auction->creator_id && $auction->status->value == "ACTIVE")
-                        <form action="{{ route('auctions.destroy', $auction->id) }}" method="POST" class="mt-2">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                        @endif
-
                     </div>
                 </div>
             </button>

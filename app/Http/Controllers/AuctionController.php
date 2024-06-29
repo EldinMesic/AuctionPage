@@ -110,7 +110,7 @@ class AuctionController extends Controller
      */
     public function show(Auction $auction)
     {
-        $is_creator = $auction->creator() == Auth::user();
+        $is_creator = $auction->creator->id === Auth::id();
         $highest_bid = $auction->highestBid();
         $is_bid_leader = $highest_bid && $highest_bid->user() == Auth::user();
 
@@ -153,7 +153,7 @@ class AuctionController extends Controller
         $auction->status = $request->status;
         $auction->save();
 
-        return redirect()->route('auctions.show')->with('success', 'Auction updated successfully.');
+        return redirect()->back()->with('success', 'Auction cancelled successfully.');
     }
 
     /**
