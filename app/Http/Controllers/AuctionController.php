@@ -30,6 +30,23 @@ class AuctionController extends Controller
      */
     public function filteredIndex(Request $request)
     {
+        $request->validate([
+            'category' => ['nullable', Rule::enum(AuctionCategory::class)],
+            'sortBy' => 'nullable|string|in:created_at,starting_price,buyout_price,item_name,category,end_time,item_description',
+            'order' => 'nullable|string|in:asc,desc'
+        ]);
+
+        $pickedCategory = $request->query('category');
+        $sortBy = $request->query('sortBy', 'created_at'); 
+        $order = $request->query('order', 'desc');
+
+        $query = Auction::query();
+        $query->where('status', AuctionStatus::ACTIVE);
+        if($pickedCategory){
+            $query->where('category', $pickedCategory);
+        }
+        $query->orderBy($sortBy, $order);
+        $auctions = $query->get();
 
         $categories = [];
         foreach (AuctionCategory::cases() as $category) {
@@ -40,18 +57,13 @@ class AuctionController extends Controller
             ];
         }
 
-        $auctions = Auction::where('status', AuctionStatus::ACTIVE)
-                    //->where('creator_id', '!=', Auth::id()) COMMENTED FOR TESTING
-                    ->where('category', $request->category)
-                    ->with('creator')
-                    ->get();
-       
         return view('home', [
             'auctions' => $auctions,
             'categories' => $categories,
-            'category' => $category
+            'category' => $pickedCategory
         ]);
     }
+
 
     public function myAuctions(){
 

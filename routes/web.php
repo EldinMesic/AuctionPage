@@ -13,7 +13,7 @@ Route::get('/', function () {
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::post('/home', [AuctionController::class, 'filteredIndex'])->name('home.auctions');
+    Route::get('/home/auctions', [AuctionController::class, 'filteredIndex'])->name('home.auctions');
 
     Route::post('/auctions/bid', [BidController::class, 'store'])->name('bid.store');
 

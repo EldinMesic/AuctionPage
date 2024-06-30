@@ -18,11 +18,49 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
+    #sortBy:hover{
+        background-color: #f0f0f0; 
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    #order:hover{
+        background-color: #f0f0f0; 
+        transition: background-color 0.3s ease;
+    }
 
 </style>
 
 <div class="d-flex justify-content-center">
-    <h1>Category: {{ $category['name'] }}</h1>
+    <h1>Category: {{ $category }}</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-4 justify-content-start">
+        <div class="form-group">
+            <label for="sortBy">Sort By:</label>
+            <select id="sortBy" class="form-control">
+                @foreach(['created_at' => 'Created At',
+                        'starting_price' => 'Starting Price',
+                        'buyout_price' => 'Buyout Price',
+                        'end_time' => 'End Time',
+                        'item_name' => 'Item Name',
+                        'item_description' => 'Item Description'] as $key => $value)
+                    <option value="{{ $key }}" @if(request()->sortBy === $key) selected @endif>{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-4 d-flex justify-content-end">
+        <div class="form-group ml-auto">
+            <label for="order">Order:</label>
+            @if(request()->order === 'desc')
+            <button class="form-control" name="order" id="order" value="asc" selected onclick="sortAuctions()">Descending</button>
+            @else
+            <button class="form-control" name="order" id="order" value="desc" selected onclick="sortAuctions()">Ascending</button>
+            @endif 
+        </div>
+    </div>
 </div>
 
 @foreach ($auctions as $auction)
@@ -61,4 +99,21 @@
         
     </div>
 </div>
+
+<script>
+    function sortAuctions() {
+        var category = @json($category);
+        var sortBy = document.getElementById('sortBy').value;
+        var order = document.getElementById('order').value;
+
+        var url = new URL('{{ route('home.auctions') }}');
+        url.searchParams.append('category', category);
+        url.searchParams.append('sortBy', sortBy);
+        url.searchParams.append('order', order);
+
+        window.location.href = url.toString();
+    }
+
+    document.getElementById('sortBy').addEventListener('change', sortAuctions);
+</script>
 @endforeach

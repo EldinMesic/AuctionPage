@@ -47,16 +47,12 @@
                 <div class="container mb-5">
                     @foreach(array_chunk($categories, 3) as $chunk)
                         <div class="row m-2">
-                            @foreach($chunk as $category)
+                            @foreach($chunk as $singleCategory)
                                 <div class="col-md-4">
                                     <div class="grid-item" onclick="submitForm(this)">
-                                        <form class="d-flex justify-content-center" method="POST" action="{{ route('home.auctions') }}">
-                                            @csrf
-                                            <input type="hidden" name="category" value="{{ $category['name'] }}">
-                                            <button type="submit">
-                                               {{ $category['name']}} ({{ $category['count']}})
-                                            </button>
-                                        </form>
+                                        <button type="submit" value="{{ $singleCategory['name'] }}">
+                                            {{ $singleCategory['name']}} ({{ $singleCategory['count']}})
+                                        </button>
                                     </div>
                                 </div>
                             @endforeach
@@ -82,10 +78,17 @@
 
 <script>
     function submitForm(element) {
-        var form = element.querySelector('form');
-        if (form) {
-            form.submit();
-        }
+
+        var category = element.querySelector('button').value;
+        var sortBy = 'created_at';
+        var order = 'desc'
+
+        var url = new URL('{{ route('home.auctions') }}');
+        url.searchParams.append('category', category);
+        url.searchParams.append('sortBy', sortBy);
+        url.searchParams.append('order', order);
+
+        window.location.href = url.toString();
     }
 </script>
 
